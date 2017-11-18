@@ -22,4 +22,8 @@ public class ActorService {
 		return actorRepository.save(actor);
 	}
 	
+	public List<Actor> getActorByFirstName(String firstName) {
+		return actorRepository != null ? actorRepository.findByFirstName(firstName) : null;
+	}
+	
 }

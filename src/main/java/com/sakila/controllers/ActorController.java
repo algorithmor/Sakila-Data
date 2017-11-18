@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +20,7 @@ import com.sakila.entities.Actor;
 import com.sakila.service.ActorService;
 
 @Controller
-@RequestMapping(path="/actor") // This means URL's start with /actor (after Application path)
+@RequestMapping(path="/actors") // This means URL's start with /actor (after Application path)
 public class ActorController {
 	
 	@Autowired // Bean for interface automatically implemented by Spring
@@ -46,7 +47,7 @@ public class ActorController {
 		return result;
 	}
 	
-	@GetMapping(path="/all")
+	@GetMapping(path="/listAll")
 	public @ResponseBody Iterable<ActorDTO> getAllUsers() {
 		List<Actor> actors = actorService.getAllActors();
 		ModelMapper modelMapper = new ModelMapper();
@@ -57,5 +58,15 @@ public class ActorController {
 		return result;
 	}
 	
+	@GetMapping(path="/findActorByName/{firstName}")
+	public @ResponseBody Iterable<ActorDTO> findActorByName(@PathVariable("firstName") String firstName) {
+		List<Actor> actors = actorService.getActorByFirstName(firstName);
+		ModelMapper modelMapper = new ModelMapper();
+		List<ActorDTO> result = new ArrayList<ActorDTO>();
+		for(Actor a : actors) {
+			result.add(modelMapper.map(a,ActorDTO.class));
+		}
+		return result;
+	}
 }
 
